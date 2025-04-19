@@ -1,0 +1,14 @@
+opencv-python==4.9.0.80
+mediapipe==0.10.11
+face-alignment==1.4.1
+torch==2.2.1
+
+tensorflow-macos==2.15.0
+tensorflow-metal==1.1.0
+numpy==1.26.4
+pandas==2.2.1
+scikit-learn==1.4.1.post1  
+
+tqdm==4.66.2
+python-dotenv==1.0.1
+matplotlib==3.8.3
