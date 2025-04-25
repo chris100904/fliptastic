@@ -12,3 +12,9 @@ scikit-learn==1.4.1.post1
 tqdm==4.66.2
 python-dotenv==1.0.1
 matplotlib==3.8.3
+
+# with new backend updates
+fastapi 
+uvicorn 
+python-multipart 
+aiofiles
