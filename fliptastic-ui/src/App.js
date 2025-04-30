@@ -3,8 +3,9 @@ import axios from "axios";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
-// Set workerSrc for react-pdf
-pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
+
+pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.mjs`;
+
 
 function App() {
   const [pdfFile, setPdfFile] = useState(null);
