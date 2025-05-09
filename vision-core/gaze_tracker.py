@@ -15,11 +15,13 @@ RIGHT_IRIS = [473, 474, 475, 476, 477]
 GAZE_HISTORY_LENGTH = 5
 SENSITIVITY = 250
 RIGHT_EDGE_THRESHOLD = 0.8
+LEFT_EDGE_THRESHOLD = 0.2
 ANALYSIS_INTERVAL = 5
 DETECTION_THRESHOLD = 0.5
 
 gaze_history = deque(maxlen=GAZE_HISTORY_LENGTH)
 right_edge_look_history = []
+left_edge_look_history = []
 last_analysis_time = time.time()
 
 cap = cv2.VideoCapture(0)
@@ -35,6 +37,8 @@ while cap.isOpened():
     
     h, w = image.shape[:2]
     
+    cv2.rectangle(image, (int(LEFT_EDGE_THRESHOLD * w), 0), 
+                 (int(RIGHT_EDGE_THRESHOLD * w), h), (100, 100, 100), 2)
     cv2.rectangle(image, (int(RIGHT_EDGE_THRESHOLD * w), 0), 
                  (w, h), (100, 100, 100), 2)
     
@@ -73,6 +77,8 @@ while cap.isOpened():
             
             is_looking_right = smooth_gaze_x > RIGHT_EDGE_THRESHOLD
             right_edge_look_history.append(is_looking_right)
+            is_looking_left = smooth_gaze_x < LEFT_EDGE_THRESHOLD
+            left_edge_look_history.append(is_looking_left)
             
             gaze_pixel = (int(smooth_gaze_x * w), h // 2)
             color = (0, 255, 0) if is_looking_right else (0, 0, 255)
@@ -86,7 +92,12 @@ while cap.isOpened():
                 if right_look_ratio >= DETECTION_THRESHOLD:
                     print(f"User looked at right edge {right_look_ratio*100:.1f}% of the time (last {ANALYSIS_INTERVAL} seconds)")
                 
+                left_look_ratio = sum(left_edge_look_history) / len(left_edge_look_history)
+                if left_look_ratio >= DETECTION_THRESHOLD:
+                    print(f"User looked at left edge {left_look_ratio*100:.1f}% of the time (last {ANALYSIS_INTERVAL} seconds)")
+                
                 right_edge_look_history = []
+                left_edge_look_history = []
                 last_analysis_time = current_time
     
     cv2.imshow('Horizontal Gaze Tracking', image)
