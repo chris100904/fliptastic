@@ -16,7 +16,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# CORS setup
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -24,7 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Upload directory setup
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
@@ -38,7 +36,6 @@ class WebcamManager:
         if self.process:
             await self.stop_webcam_process()
         
-        # Use sys.executable to ensure we use the same Python interpreter
         python_path = sys.executable
         script_path = os.path.abspath(os.path.join(
             os.path.dirname(__file__), 
@@ -70,7 +67,7 @@ class WebcamManager:
                 await self.process.wait()
                 print(f"Stopped webcam process (PID: {self.process.pid})")
             except ProcessLookupError:
-                pass  # Process already terminated
+                pass
             finally:
                 self.process = None
                 self.current_mode = None
@@ -126,7 +123,7 @@ async def websocket_endpoint(websocket: WebSocket):
 async def upload_pdf(pdf: UploadFile = File(...)):
     if pdf.content_type != "application/pdf":
         raise HTTPException(400, "Only PDF files are allowed")
-    # give each upload a unique name
+    
     filename = f"{uuid.uuid4()}.pdf"
     path = os.path.join(UPLOAD_DIR, filename)
     contents = await pdf.read()
