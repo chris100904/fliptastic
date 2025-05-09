@@ -1,23 +1,38 @@
 .header {
   position: relative;
-  background-color: var(--accent-light);
-  color: var(--primary-dark);
+  background-color: var(--primary);
+  color: white;
   padding: 100px 20px;
   text-align: center;
   font-family: 'Silkscreen', cursive;
 }
 
 .header h1 {
-  font-size: 4.5rem;
+  font-size: 6rem;
   margin: 0;
+  /* hard shadow: 2px right, 2px down, no blur, using your dark variable */
+  text-shadow: 6px 6px 0 var(--text-dark);
+}
+
+.logo-letter {
+  display: inline-block;
+  /* preserve 3D space so the backface looks right */
+  transform-style: preserve-3d;
+  /* smooth transition */
+  transition: transform 0.4s;
+}
+
+/* when you hover a single letter, rotate it around the Y axis */
+.logo-letter:hover {
+  transform: rotateY(180deg);
 }
 
 .subheading {
-  font-size: 1.4rem;
+  font-size: 2rem;
   margin: 10px auto 0;
   max-width: 800px;
   text-align: center;
-  color: var(--primary-dark);
+  color: var(--accent-light);
   font-family: 'Share Tech', monospace;
 }
 
@@ -28,12 +43,12 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 30px;
+  height: 10px;
   background: repeating-linear-gradient(to right,
-      #fff 0,
-      #fff 20px,
-      #000 20px,
-      #000 30px);
+      var(--light-bg) 0,
+      var(--light-bg) 20px,
+      var(--primary) 20px,
+      var(--primary) 30px);
 }
 
 .mode-grid {
@@ -82,21 +97,21 @@
 .mode-card.blink .mode-button {
   color: var(--primary);
   border-color: var(--primary);
-  background: var(--primary);
+  background: white;
 }
 
 .mode-card.gaze .mode-icon,
 .mode-card.gaze .mode-button {
   color: var(--accent-light);
   border-color: var(--accent-light);
-  background: var(--accent-light);
+  background: white;
 }
 
 .mode-card.head .mode-icon,
 .mode-card.head .mode-button {
   color: var(--primary-dark);
   border-color: var(--primary-dark);
-  background: var(--primary-dark);
+  background: white;
 }
 
 .mode-card h2 {

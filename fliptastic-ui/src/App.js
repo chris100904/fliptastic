@@ -26,7 +26,11 @@ function HomePage({ onChooseMode }) {
   return (
     <>
       <header className="header">
-        <h1>Fliptastic</h1>
+        <h1 className="logo">
+          {'Fliptastic'.split('').map((ch, i) => (
+            <span key={i} className="logo-letter">{ch}</span>
+          ))}
+        </h1>
         <p className="subheading">
           Flip pages hands‑free: blink, gaze, or tilt!
         </p>
