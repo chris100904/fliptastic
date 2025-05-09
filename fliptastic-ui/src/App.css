@@ -1,38 +1,203 @@
-.App {
+.header {
+  position: relative;
+  background-color: var(--accent-light);
+  color: var(--primary-dark);
+  padding: 100px 20px;
+  text-align: center;
+  font-family: 'Silkscreen', cursive;
+}
+
+.header h1 {
+  font-size: 4.5rem;
+  margin: 0;
+}
+
+.subheading {
+  font-size: 1.4rem;
+  margin: 10px auto 0;
+  max-width: 800px;
+  text-align: center;
+  color: var(--primary-dark);
+  font-family: 'Share Tech', monospace;
+}
+
+/* Piano keyboard pattern stripe */
+.header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: repeating-linear-gradient(to right,
+      #fff 0,
+      #fff 20px,
+      #000 20px,
+      #000 30px);
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.mode-card {
+  background: #fff;
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mode-card.blink {
+  border-color: var(--primary);
+}
+
+.mode-card.gaze {
+  border-color: var(--accent-light);
+}
+
+.mode-card.head {
+  border-color: var(--primary-dark);
+}
+
+.mode-icon {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+  color: inherit;
+}
+
+.mode-card.blink .mode-icon,
+.mode-card.blink .mode-button {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.mode-card.gaze .mode-icon,
+.mode-card.gaze .mode-button {
+  color: var(--accent-light);
+  border-color: var(--accent-light);
+  background: var(--accent-light);
+}
+
+.mode-card.head .mode-icon,
+.mode-card.head .mode-button {
+  color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  background: var(--primary-dark);
+}
+
+.mode-card h2 {
+  font-family: 'Silkscreen', cursive;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.mode-card p {
+  font-family: 'Share Tech', monospace;
+  font-size: 0.95rem;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.mode-button {
+  margin-top: 15px;
+  color: #fff;
+  font-family: 'Silkscreen', cursive;
+  font-weight: 700;
+  border: 2px solid;
+  border-radius: 6px;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+.mode-button:hover {
+  filter: brightness(0.9);
+}
+
+.mode-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: 'Share Tech', monospace;
+  margin-bottom: 20px;
+}
+
+.mode-title {
+  font-family: 'Silkscreen', cursive;
+  font-weight: 700;
+  font-size: 3rem;
+  color: var(--primary-dark);
+  text-align: center;
+  margin: 0 auto 30px;
+  max-width: 800px;
+}
+
+.drop-zone {
+  border: 2px dashed var(--primary);
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-dark);
+  cursor: pointer;
+  font-family: 'Share Tech', monospace;
+}
+
+.upload-button {
+  display: block;
+  margin: 20px auto;
+  color: #fff;
+  font-family: 'Silkscreen', cursive;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  cursor: pointer;
+  background: var(--primary);
+}
+
+.upload-button:disabled {
+  background: #B0BEC5;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #C0392B;
+  margin-top: 10px;
+  font-family: 'Share Tech', monospace;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.viewer-container {
+  margin-top: 30px;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.pager-controls {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-family: 'Share Tech', monospace;
 }

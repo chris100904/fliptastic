@@ -1,13 +1,22 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech&display=swap');
+
+:root {
+  /* Color Palette */
+  --primary-dark: #293241;
+  --primary: #3D5A80;
+  --accent-light: #98C1D9;
+  --light-bg: #E0FBFC;
+  --text-dark: #293241;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  background: var(--light-bg);
+  font-family: 'Share Tech', monospace;
+  color: var(--text-dark);
+}
+
+.App {
+  min-height: 100vh;
 }
