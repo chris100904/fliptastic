@@ -51,11 +51,15 @@ last_tilt_direction = None
 EYE_AR_THRESHOLD = 0.25
 EYE_AR_CONSEC_FRAMES = 2
 CONSECUTIVE_BLINKS_THRESHOLD = 3
-BLINK_WINDOW_TIME = 3.0 
+BLINK_WINDOW_TIME = 1.0
 blink_counter = 0
 frame_counter = 0
-last_blink_time = time.time()
-blink_sequence = 0
+last_blink_time = None
+blink_timestamps = []
+
+PAGE_FLIP_MESSAGE = ""
+PAGE_FLIP_MESSAGE_TIME = 0
+PAGE_FLIP_DISPLAY_DURATION = 2.0
 
 GAZE_HISTORY_LENGTH = 5
 SENSITIVITY = 250
@@ -67,10 +71,6 @@ gaze_history = deque(maxlen=GAZE_HISTORY_LENGTH)
 right_edge_look_history = []
 left_edge_look_history = []
 last_analysis_time = time.time()
-
-PAGE_FLIP_MESSAGE = ""
-PAGE_FLIP_MESSAGE_TIME = 0
-PAGE_FLIP_DISPLAY_DURATION = 2.0
 
 async def send_command(command):
     logger.info(f"Attempting to send command: {command}")
@@ -156,29 +156,30 @@ async def process_head_tilt(image, mesh_points, h, w):
 
 async def process_blink_detection(image, mesh_points, h, w):
     """Process blink detection"""
-    global blink_counter, frame_counter, last_blink_time, blink_sequence
+    global blink_counter, frame_counter, last_blink_time, blink_timestamps
     global PAGE_FLIP_MESSAGE, PAGE_FLIP_MESSAGE_TIME
     
     left_ear = eye_aspect_ratio(LEFT_EYE_INDICES, mesh_points)
     right_ear = eye_aspect_ratio(RIGHT_EYE_INDICES, mesh_points)
     avg_ear = (left_ear + right_ear) / 2.0
     
+    current_time = time.time()
+    
     if avg_ear < EYE_AR_THRESHOLD:
         frame_counter += 1
     else:
         if frame_counter >= EYE_AR_CONSEC_FRAMES:
             blink_counter += 1
-            current_time = time.time()
+            blink_timestamps.append(current_time)
             
-            if current_time - last_blink_time <= BLINK_WINDOW_TIME:
-                blink_sequence += 1
-                if blink_sequence >= CONSECUTIVE_BLINKS_THRESHOLD:
-                    PAGE_FLIP_MESSAGE = "Page flipped"
-                    PAGE_FLIP_MESSAGE_TIME = current_time
-                    await send_command("next_page")
-                    blink_sequence = 0
-            else:
-                blink_sequence = 1
+            blink_timestamps = [t for t in blink_timestamps if current_time - t <= BLINK_WINDOW_TIME]
+            
+            if len(blink_timestamps) >= CONSECUTIVE_BLINKS_THRESHOLD:
+                PAGE_FLIP_MESSAGE = f"Page flipped ({len(blink_timestamps)} blinks)"
+                PAGE_FLIP_MESSAGE_TIME = current_time
+                await send_command("next_page")
+                blink_timestamps = []
+                blink_counter = 0
             
             last_blink_time = current_time
         
@@ -186,9 +187,9 @@ async def process_blink_detection(image, mesh_points, h, w):
     
     cv2.putText(image, f"EAR: {avg_ear:.2f}", (10, 30),
                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-    cv2.putText(image, f"Blinks: {blink_counter}", (10, 60),
+    cv2.putText(image, f"Blinks: {len(blink_timestamps)}", (10, 60),
                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-    cv2.putText(image, f"Sequence: {blink_sequence}", (10, 90),
+    cv2.putText(image, f"Window: {BLINK_WINDOW_TIME:.1f}s", (10, 90),
                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
     
     current_time = time.time()
